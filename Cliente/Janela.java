@@ -1,4 +1,5 @@
 package Cliente;
+import Servidor.*;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -6,11 +7,13 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.imageio.*;
 import java.io.*;
 import java.util.*;
-
+import java.net.*;
  
 public class Janela extends JFrame 
 {
     protected static final long serialVersionUID = 1L;
+    public static final String HOST_PADRAO  = "localhost";
+	public static final int    PORTA_PADRAO = 3000;
 
     protected JButton btnPonto   = new JButton ("Ponto"),
                       btnLinha   = new JButton ("Linha"),
@@ -822,27 +825,60 @@ public class Janela extends JFrame
     {
        public void actionPerformed(ActionEvent e)
         {
-                JFileChooser j= new JFileChooser();
-                j.setFileFilter(new FileNameExtensionFilter("projetoPoo", "projetoPoo", ".projetoPoo"));    
-    	        j.setAcceptAllFileFilterUsed(false);   
-                
-               
-                int returnVal = j.showSaveDialog(Janela.this);
-                if (returnVal == JFileChooser.APPROVE_OPTION) {
-                try {
-                    String arquivo = j.getSelectedFile().getAbsolutePath();
-                    if(!arquivo.endsWith(".projetoPoo"))
-                                    arquivo+=".projetoPoo";
-                    FileWriter fw = new FileWriter(arquivo);
-                    for(int k = 0; k<figuras.size(); k++){
-                        fw.write(figuras.elementAt(k).toString());
-                        fw.write("\n");
-                    }
-                    fw.close();
-                } catch (Exception err) {
-                    err.printStackTrace();
-                }
+    	    Socket conexao=null;     
+            try 
+            {
+            	String host = HOST_PADRAO;
+                int    porta= PORTA_PADRAO;
+            	conexao = new Socket (host, porta);
             }
+            catch (Exception erro)
+            {
+                System.err.println ("Indique o servidor e a porta corretos!\n");
+                return;
+            }
+
+            ObjectOutputStream transmissor=null;
+            try
+            {
+                transmissor =
+                new ObjectOutputStream(conexao.getOutputStream());
+            }
+            catch (Exception erro)
+            {
+                System.err.println ("Indique o servidor e a porta corretos!\n");
+                return;
+            }
+
+            ObjectInputStream receptor=null;
+            try
+            {
+                receptor =
+                new ObjectInputStream(conexao.getInputStream());
+            }
+            catch (Exception erro)
+            {
+                System.err.println ("Indique o servidor e a porta corretos!\n");
+                return;
+            }
+
+            Parceiro servidor=null;
+            try
+            {
+                servidor =
+                new Parceiro (conexao, receptor, transmissor);
+            }
+            catch (Exception erro)
+            {
+                System.err.println ("Indique o servidor e a porta corretos!\n");
+                return;
+            }
+
+            /*try
+            {
+            	Desenhos d = new Desenhos(figuras);
+            }*/
+            
                
         }
     }

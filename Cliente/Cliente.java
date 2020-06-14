@@ -1,8 +1,6 @@
 package Cliente;
 import java.net.*;
 
-import Servidor.PedidoParaSair;
-
 import java.io.*;
 
 public class Cliente
@@ -95,7 +93,6 @@ public class Cliente
 
 		try
 		{
-			//servidor.receba (new PedidoParaSair ());
 		}
 		catch (Exception erro)
 		{}

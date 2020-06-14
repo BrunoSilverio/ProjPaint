@@ -6,11 +6,13 @@ public class PedidoDeSalvamento extends Comunicado {
 	
 	private double idCliente; // vai ser o ip
 	private Desenhos desenho;
+	private String nomeDoDesenho;
 	
-	public PedidoDeSalvamento (double idCliente, Desenhos des)
+	public PedidoDeSalvamento (double idCliente, Desenhos des, String nome)
 	{
 		this.idCliente = idCliente;
 		this.desenho = des;
+		this.nomeDoDesenho = nome;
 	}
 	
 	public double getIdCliente ()
@@ -22,7 +24,12 @@ public class PedidoDeSalvamento extends Comunicado {
 	{
 		return this.desenho;
 	}
-	//talvez um getQuantidadeDesenho - para saber quantos desenhos são
+	public double getQuantidadeDesenho()
+	{
+		return desenho.getQtd();
+				
+	}
+	
     //metodo para acrescentar um desenho
     //metodo adicionar desenho
 }
