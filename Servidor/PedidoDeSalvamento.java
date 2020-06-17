@@ -1,14 +1,16 @@
 package Servidor;
 
+import BD.daos.Paints;
+
 public class PedidoDeSalvamento extends Comunicado {
 	// vetor com os desenhos
     // nome do desenho
 	
-	private double idCliente; // vai ser o ip
-	private Desenhos desenho;
+	private int idCliente; // vai ser o ip
+	private Paints desenho;
 	private String nomeDoDesenho;
 	
-	public PedidoDeSalvamento (double idCliente, Desenhos des, String nome)
+	public PedidoDeSalvamento (int idCliente, Paints des, String nome)
 	{
 		this.idCliente = idCliente;
 		this.desenho = des;
@@ -20,15 +22,16 @@ public class PedidoDeSalvamento extends Comunicado {
 		return this.idCliente;
 	}
 	
-	public Desenhos getDesenho ()
+	public Paints getDesenho ()
 	{
 		return this.desenho;
 	}
-	public double getQuantidadeDesenho()
+	
+	/*public double getQuantidadeDesenho()
 	{
 		return desenho.getQtd();
 				
-	}
+	}*/
 	
     //metodo para acrescentar um desenho
     //metodo adicionar desenho

@@ -1,9 +1,10 @@
 package BD.core;
-
+//import java.sql.*;
 import java.io.InputStream;
 import java.io.Reader;
 import java.math.BigDecimal;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.sql.Array;
 import java.sql.Blob;
@@ -115,9 +116,9 @@ public class MeuPreparedStatement extends MeuStatement implements PreparedStatem
         return this.comando.getParameterMetaData ();
     }
 
-    public void setArray (int parameterIndex, Array x) throws SQLException
+    public void setArray (int parameterIndex, Array arrayList) throws SQLException
     {
-        this.comando.setArray (parameterIndex, x);
+        this.comando.setArray (parameterIndex, arrayList);
     }
 
     public void setAsciiStream (int parameterIndex, InputStream x) throws SQLException
@@ -345,7 +346,7 @@ public class MeuPreparedStatement extends MeuStatement implements PreparedStatem
         this.comando.setTimestamp (parameterIndex, x, cal);
     }
 
-    public void setUnicodeStream (int parameterIndex, InputStream x, int length) throws SQLException
+	public void setUnicodeStream (int parameterIndex, InputStream x, int length) throws SQLException
     {
         this.comando.setUnicodeStream (parameterIndex, x, length);
     }

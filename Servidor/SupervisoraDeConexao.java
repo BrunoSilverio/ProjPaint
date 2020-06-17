@@ -2,10 +2,13 @@ package Servidor;
 
 import java.io.*;
 import java.net.*;
+import java.sql.Array;
+import java.sql.Date;
 import java.util.*;
-//MUDAR ESSA CLASSE.
-//Aqui é onde o servidor faz o que o cliente pede.
-//Verifica o que o comunicado é.
+
+import BD.daos.*;
+import BD.dbos.*;
+
 public class SupervisoraDeConexao extends Thread
 {
     private double              valor=0;
@@ -94,6 +97,17 @@ public class SupervisoraDeConexao extends Thread
 					// que voce vai fazer
 					// -----
 					// desconectar o usuario
+                	try
+                    {
+                		//Desenhos.incluir (new Desenho (1,"L'Etranger",20));
+                		//usuarios.add(new Paint(idCliente, nomeDesenho, dataCriacao, dataUltimaAtualizacao, conteudo))
+                        System.out.println ("Desenho SALVO com sucesso!");
+                    }
+                    catch (Exception erro)
+                    {
+            			erro.printStackTrace();
+                        System.out.println (erro.getMessage());
+                    }
 		        }
                 //PEDIDO PARA ABRIR O DESENHO
                 else if (comunicado instanceof PedidoDeAbertura)
@@ -104,6 +118,16 @@ public class SupervisoraDeConexao extends Thread
 					// cliente fazendo usuario.receba(desenho)
 					// -----
 					// desconecta o usuario
+                	try
+                    {
+                		//Desenhos.incluir (new Desenho (1,"L'Etranger",20));
+                        System.out.println ("Desenho ENCONTRADO com sucesso!");
+                    }
+                    catch (Exception erro)
+                    {
+            			erro.printStackTrace();
+                        System.out.println (erro.getMessage());
+                    }
                 }
             }
         }
