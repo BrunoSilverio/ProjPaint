@@ -750,20 +750,29 @@ public class Janela extends JFrame
     {
     	public void actionPerformed(ActionEvent e)
     	{
-    		JFileChooser arquivoEscolhido = new JFileChooser();
-    		FileNameExtensionFilter filtroExt = new FileNameExtensionFilter("projetoPoo", "ProjetoPoo");
-    		arquivoEscolhido.setFileFilter(filtroExt);
-    		int retorno = arquivoEscolhido.showOpenDialog(getContentPane());
-    		if(retorno == JFileChooser.APPROVE_OPTION)
-    		{
+    		Parceiro servidor;
+    		Socket conexao=null;     
+            try 
+            {
+            	String host = HOST_PADRAO;
+                int    porta= PORTA_PADRAO;
+            	conexao = new Socket (host, porta);
+            }
+            catch (Exception erro)
+            {
+                System.err.println ("Indique o servidor e a porta corretos!\n");
+                return;
+            }
     			try
     			{
-    				FileReader leitorArquivo = new FileReader(arquivoEscolhido.getSelectedFile());
-    				BufferedReader leitorBuffer = new BufferedReader(leitorArquivo);
-    				String line;
+    				PedidoDeAbertura pda = new PedidoDeAbertura(nomeDoCliente, nomeDoDesenho, dataCriacao, dataUltimaAtualizacao);
+    				servidor.receba(pda);
+    				//Faço ele transformar o comunicado de resposta do servidor em desenho pois eu ja sei que esse comunicado é um desenho
+    				Desenho d = (Desenho)servidor.envie();
     				
-    				while((line = leitorBuffer.readLine()) != null)
+    				while((d.pegaDesenho() != NULL)
     				{
+    					String line = d.pegaDesenho(i)
     					if(line.charAt(0) == 'd')
     					{
     						figuras.add(new Ponto(line));
@@ -817,6 +826,8 @@ public class Janela extends JFrame
     			{
     				err.printStackTrace();
     			}
+    			
+    			servidor.adeus();
     		}
     	}
     }
@@ -874,10 +885,20 @@ public class Janela extends JFrame
                 return;
             }
 
-            /*try
+            try
             {
+            	String nome = JOptionPane.showInputDialog("Nome do Desenho");
+            	String autor = JOptionPane.showInputDialog("Nome do Autor do Desenhor");
             	Desenhos d = new Desenhos(figuras);
-            }*/
+            	d.adicionaNomeDesenho(nome);
+            	d.adicionaAutorDesenho(autor);
+            }
+            catch (Exception erro)
+            {
+            	return;
+            }
+            
+            servidor.adeus();
             
                
         }
