@@ -754,98 +754,25 @@ public class Janela extends JFrame
     {
     	public void actionPerformed(ActionEvent e)
     	{
-    		Parceiro servidor;
-    		Socket conexao=null;     
-            try 
+    		if (args.length>2)
             {
-            	String host = HOST_PADRAO;
-                int    porta= PORTA_PADRAO;
-            	conexao = new Socket (host, porta);
-            }
-            catch (Exception erro)
-            {
-                System.err.println ("Indique o servidor e a porta corretos!\n");
+                System.err.println ("Uso esperado: java Cliente [HOST [PORTA]]\n");
                 return;
             }
-    			try
-    			{
-    				PedidoDeAbertura pda = new PedidoDeAbertura(nomeDoCliente, nomeDoDesenho, dataCriacao, dataUltimaAtualizacao);
-    				servidor.receba(pda);
-    				//Faço ele transformar o comunicado de resposta do servidor em desenho pois eu ja sei que esse comunicado é um desenho
-    				Desenho d = (Desenho)servidor.envie();
-    				
-    				while((d.pegaDesenho() != NULL)
-    				{
-    					String line = d.pegaDesenho(i)
-    					if(line.charAt(0) == 'd')
-    					{
-    						figuras.add(new Ponto(line));
-    						figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics());
-    					}
-    					else
-    						if(line.charAt(0) == 'l')
-    						{
-    							figuras.add(new Linha(line));
-    							figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics());
-    						}
-    						else
-    							if(line.charAt(0) == 'q')
-    	    					{
-    	    						figuras.add(new Quadrado(line));
-    	    						figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics());
-    	    					}
-    							else
-        							if(line.charAt(0) == 'r')
-        	    					{
-        	    						figuras.add(new Retangulo(line));
-        	    						figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics());
-        	    					}
-        							else
-            							if(line.charAt(0) == 'p')
-            	    					{
-            	    						figuras.add(new Poligono(line));
-            	    						figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics());
-            	    					}
-            							else
-                							if(line.charAt(0) == 'c')
-                	    					{
-                	    						figuras.add(new Circulo(line));
-                	    						figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics());
-                	    					}
-                							else
-                    							if(line.charAt(0) == 'e')
-                    	    					{
-                    	    						figuras.add(new Elipse(line));
-                    	    						figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics());
-                    	    					}
-                    							else
-                        							if(line.charAt(0) == 't')
-                        	    					{
-                        	    						figuras.add(new Texto(line));
-                        	    						figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics());
-                        	    					}
-    				}
-    			}
-    			catch(Exception err)
-    			{
-    				err.printStackTrace();
-    			}
-    			
-    			servidor.adeus();
-    		}
-    	}
-    }
-    
-    protected class Salvar implements ActionListener
-    {
-       public void actionPerformed(ActionEvent e)
-        {
-    	    Socket conexao=null;     
-            try 
+
+            Socket conexao=null;
+            try
             {
-            	String host = HOST_PADRAO;
-                int    porta= PORTA_PADRAO;
-            	conexao = new Socket (host, porta);
+                String host = Janela.HOST_PADRAO;
+                int    porta= Janela.PORTA_PADRAO;
+
+                if (args.length>0)
+                    host = args[0];
+
+                if (args.length==2)
+                    porta = Integer.parseInt(args[1]);
+
+                conexao = new Socket (host, porta);
             }
             catch (Exception erro)
             {
@@ -857,7 +784,8 @@ public class Janela extends JFrame
             try
             {
                 transmissor =
-                new ObjectOutputStream(conexao.getOutputStream());
+                new ObjectOutputStream(
+                conexao.getOutputStream());
             }
             catch (Exception erro)
             {
@@ -869,7 +797,8 @@ public class Janela extends JFrame
             try
             {
                 receptor =
-                new ObjectInputStream(conexao.getInputStream());
+                new ObjectInputStream(
+                conexao.getInputStream());
             }
             catch (Exception erro)
             {
@@ -888,19 +817,164 @@ public class Janela extends JFrame
                 System.err.println ("Indique o servidor e a porta corretos!\n");
                 return;
             }
-
-            try
-            {
-            	String nomeDesenho = JOptionPane.showInputDialog("Nome do Desenho");
-            	Desenho d = new Desenho(0, nomeDesenho, 0, 0, figuras);
-            }
-            catch (Exception erro) 
-            {
-            	return;
-            }
             
-            servidor.adeus();     
+
+		PedidoDeAbertura1 pedidoAbertura = new PedidoDeAbertura(1.0,"d1");
+		try {
+            protected int posi = 0;
+			servidor.receba (pda);
+			Desenho des = (Desenho)servidor.envie();
+			Figura s = des.getFigura(0);
+			System.out.print(s);
+
+	  		do 
+            {
+	  		  	s = des.getFigura(posi);
+		
+	    		switch (s[0])
+	    		{
+	    		    case 'd': 
+	    		    	figuras.add (new Ponto ((s)));
+	    		    	figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics());
+	    		    	break;
+	    		    case 'l': 
+	    		        figuras.add (new Linha ((s)));
+	    		        figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics());
+	    		    	break;
+	    		    case 'q': 
+	    		    	figuras.add (new Quadrado ((s)));
+	    				figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics());
+	    		    	break;
+	    		    case 'r': 
+	    		    	figuras.add (new Retangulo ((s)));
+						figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics());
+	    		    	break;
+	    		    case 'c': 
+	    		        figuras.add (new Circulo ((s)));
+						figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics());
+	    		    	break;
+	    		    case 'e': 
+	    		    	figuras.add (new Elipse ((s)));
+						figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics());
+						break;
+	    		    case 'p': 
+	    		    	figuras.add (new Poligono ((s)));
+	    				figuras.get(figuras.size()-1).torneSeVisivel(pnlDesenho.getGraphics());
+	    		    	break;			
+	    		}
+	    		posi ++;		  	
+	  		}while(s.charAt(2) == ',');
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	}
+    }
+    
+    
+    protected class Salvar implements ActionListener
+    {
+       public void actionPerformed(ActionEvent e)
+        {
+    	   public void salvando (String[] args)
+	       	{
+	           if (args.length>2)
+	           {
+	               System.err.println ("Uso esperado: java Cliente [HOST [PORTA]]\n");
+	               return;
+	           }
+	
+	           Socket conexao=null;
+	           try
+	           {
+	               String host = Janela.HOST_PADRAO;
+	               int    porta= Janela.PORTA_PADRAO;
+	
+	               if (args.length>0)
+	                   host = args[0];
+	
+	               if (args.length==2)
+	                   porta = Integer.parseInt(args[1]);
+	
+	               conexao = new Socket (host, porta);
+	           }
+	           catch (Exception erro)
+	           {
+	               System.err.println ("Indique o servidor e a porta corretos!\n");
+	               return;
+	           }
+	
+	           ObjectOutputStream transmissor=null;
+	           try
+	           {
+	               transmissor =
+	               new ObjectOutputStream(
+	               conexao.getOutputStream());
+	           }
+	           catch (Exception erro)
+	           {
+	               System.err.println ("Indique o servidor e a porta corretos!\n");
+	               return;
+	           }
+	
+	           ObjectInputStream receptor=null;
+	           try
+	           {
+	               receptor =
+	               new ObjectInputStream(
+	               conexao.getInputStream());
+	           }
+	           catch (Exception erro)
+	           {
+	               System.err.println ("Indique o servidor e a porta corretos!\n");
+	               return;
+	           }
+	
+	           Parceiro servidor=null;
+	           try
+	           {
+	               servidor =
+	               new Parceiro (conexao, receptor, transmissor);
+	           }
+	           catch (Exception erro)
+	           {
+	               System.err.println ("Indique o servidor e a porta corretos!\n");
+	               return;
+	           }
+	
+	           Desenho d = new Desenho1 ();
+	           
+	           d.addNome("d1");
+	           d.adddataCriacao("data1");
+	           d.adddataUltimaAtualizacao("data2");
+	           d.adicionaAutorDoDesenho ("autor"); 
+	
+	           //fazer diversas vezes, num loop, 
+	           for(int i = 0; i<figuras.size();i++)
+	           {
+	               des1.addFigura(figuras.get(i));
+	           }
+	
+	           PedidoDeSalvamento pedidoSalv = new PedidoDeSalvamento(1.0,des1,"d1");
+	
+	           try 
+	           {
+	               servidor.receba(new PedidoDeSalvamento(1.0,des1,"d1"));
+	               
+	           }
+	           
+	           catch (Exception erro)
+	           {
+	               System.out.print (erro);
+	               System.err.println ("Erro de comunicacao com o servidor;");
+	               System.err.println ("Tente novamente!");
+	               System.err.println ("Caso o erro persista, tente mais tarde\n");
+	           }
+	           
+	           Comunicado comunicado = null;
+	
+	           } 
         }
     }
- 
 }
