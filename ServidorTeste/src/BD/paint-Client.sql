@@ -10,8 +10,8 @@ USE paint;
 CREATE TABLE desenhos (
     ipCliente VARCHAR(250) PRIMARY KEY, 
     idDesenho INT AUTO_INCREMENT NOT NULL,
-    dtCriacao DATETIME NOT NULL,
-    dtAtualizacao DATETIME NOT NULL
+    dtCriacao VARCHAR(10) NOT NULL,
+    dtAtualizacao VARCHAR(10) NOT NULL
 );
 -- ============================================================== --
 -- =================Criação da tabela de figuras================= --

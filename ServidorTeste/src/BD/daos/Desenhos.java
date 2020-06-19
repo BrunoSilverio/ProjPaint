@@ -14,7 +14,7 @@ public class Desenhos
 	//Nao tem atributos em bd.daos
 	
 	//BUSCA CLIENTE NO SERVIDOR
-	public static boolean cadastrado (double idCliente) throws Exception
+	public static boolean cadastrado (String ipCliente) throws Exception
     {
         boolean retorno = false;
 
@@ -23,12 +23,12 @@ public class Desenhos
             String sql;
 
             sql = "SELECT * " + 
-            	  "FROM CLIENTES " + 
-            	  "WHERE IDCLIENTE = ?";
+            	  "FROM DESENHOS " + 
+            	  "WHERE IPCLIENTE = ?";
 
             BDSQLServer.COMANDO.prepareStatement (sql);
             
-            BDSQLServer.COMANDO.setDouble (1, idCliente);
+            BDSQLServer.COMANDO.setString (1, ipCliente);
 
             MeuResultSet resultado = (MeuResultSet)BDSQLServer.COMANDO.executeQuery ();
 
@@ -36,32 +36,33 @@ public class Desenhos
         }
         catch (SQLException erro)
         {
-            throw new Exception ("ERRO ao procurar o ID Cliente.");
+            throw new Exception ("ERRO ao procurar o IP Cliente!");
         }
         return retorno;
     }
+	
 	//INSERE UM CLIENTE NOVO NO BANCO
 	public static void salvamento (Desenho cliente) throws Exception
 	{
 	    if (cliente==null)
-	        throw new Exception ("Cliente NAO fornecido.");
-
+	        throw new Exception ("Cliente NAO fornecido!");
+	    
+	    //INSERT INTO DESENHOS
 	    try
 	    {
 	        String sql;
 
-	        sql = "INSERT INTO CLIENTES " + 
-	        	  "(IDCLIENTE,NOMEDESENHO,DATACRIACAO,DATAULTIMAATUALIZACAO,CONTEUDO)" + 
+	        sql = "INSERT INTO DESENHOS " + 
+	        	  "(IPCLIENTE,IDDESENHO,DTCRIACAO,DTATUALIZACAO)" + 
 	        	  "VALUES " + 
-	        	  "(?,?,?,?,?)";
-
+	        	  "(?,?,?,?)";
+	        
 	        BDSQLServer.COMANDO.prepareStatement (sql);
 
-	        BDSQLServer.COMANDO.setDouble (1, cliente.getIdCliente ());
-	        BDSQLServer.COMANDO.setString (2, cliente.getNomeDesenho ());
-	        BDSQLServer.COMANDO.setDate   (3, cliente.getDataCriacao ());
-	        BDSQLServer.COMANDO.setDate   (4, cliente.getDataUltimaAtualizacao ());
-	        BDSQLServer.COMANDO.setArray  (5, (Array) cliente.getConteudo ());//NAO SEI SE TA CERTO O ARRAY
+	        BDSQLServer.COMANDO.setString (1, cliente.getIpCliente ());
+	        BDSQLServer.COMANDO.setInt 	  (2, cliente.getIdDesenho ());
+	        BDSQLServer.COMANDO.setString (3, cliente.getDtCriacao ());
+	        BDSQLServer.COMANDO.setString (4, cliente.getDtAtualizacao ());
 
 	        BDSQLServer.COMANDO.executeUpdate ();
 	        BDSQLServer.COMANDO.commit        ();
@@ -69,32 +70,58 @@ public class Desenhos
 	    catch (SQLException erro)
 	    {
 	    	BDSQLServer.COMANDO.rollback();
-	        throw new Exception ("ERRO ao inserir cliente.");
+	        throw new Exception ("ERRO ao inserir Desenhos!");
+	    }
+	    //INSERT INTO FIGURAS
+	    try
+	    {
+	        String sql2;
+
+	        sql2 = "INSERT INTO FIGURAS " + 
+		          "(IDFIGURA,STRGERADOR,IDDESENHO)" + 
+		          "VALUES " + 
+		          "(?,?,?)";
+
+	        BDSQLServer.COMANDO.prepareStatement (sql2);
+
+	        BDSQLServer.COMANDO.setInt 	  (1, cliente.getIdFigura ());
+	        BDSQLServer.COMANDO.setArray (2, cliente.getStrGerador ()); //Nao sei mexer nesse ArrayList<String>
+	        BDSQLServer.COMANDO.setInt 	  (3, cliente.getIdDesenho ());
+	        
+	        BDSQLServer.COMANDO.executeUpdate ();
+	        BDSQLServer.COMANDO.commit        ();
+	    }
+	    catch (SQLException erro)
+	    {
+	    	BDSQLServer.COMANDO.rollback();
+	        throw new Exception ("ERRO ao inserir Figuras!");
 	    }
 	}
+	
 	//ATUALIZA DESENHO NO SERVIDOR
 	public static void alterar (Desenho cliente) throws Exception
 	{
 		if (cliente==null)
 	    	throw new Exception ("Cliente NAO fornecido.");
 
-		if (!cadastrado (cliente.getIdCliente()))
+		if (!cadastrado (cliente.getIpCliente()))
 	    	throw new Exception ("Cliente NAO cadastrado.");
-
+		
+		//UPDATE DO DESENHO
 	 	try
 	 	{
 	    	String sql;
 
-	     	sql = "UPDATE CLIENTES " +
-	              "SET DATAULTIMAATUALIZACAO=? " +
-	              "SET CONTEUDO=? " +
-	              "WHERE IDCLIENTE = ?";
-
+	     	sql = "UPDATE DESENHOS " +
+	              "SET DTATUALIZACAO = ? " +
+	              "WHERE IDDESENHO = ? " +
+	              "WHERE IPCLIENTE = ? ";
+	     		     	
 	     	BDSQLServer.COMANDO.prepareStatement (sql);
-
-	     	BDSQLServer.COMANDO.setDate (1, cliente.getDataUltimaAtualizacao ());
-	    	BDSQLServer.COMANDO.setArray(2, (Array) cliente.getConteudo ());
-	     	BDSQLServer.COMANDO.setDouble  (3, cliente.getIdCliente ());
+	     	
+	     	BDSQLServer.COMANDO.setString (1, cliente.getDtAtualizacao ());
+	     	BDSQLServer.COMANDO.setInt 	  (2, cliente.getIdDesenho ());
+	     	BDSQLServer.COMANDO.setString (3, cliente.getIpCliente ());
 
 	     	BDSQLServer.COMANDO.executeUpdate ();
 	     	BDSQLServer.COMANDO.commit        ();
@@ -102,11 +129,36 @@ public class Desenhos
 	    catch (SQLException erro)
 	    {
 			BDSQLServer.COMANDO.rollback();
-	    	throw new Exception ("ERRO ao atualizar dados do cliente.");
+	    	throw new Exception ("ERRO ao atualizar dados do Desenho!");
+	  	}
+		//UPDATE DA FIGURA
+	 	try
+	 	{
+	    	String sql2;
+	     	
+	     	sql2 = "UPDATE FIGURAS " +
+		           "SET STRGERADOR = ? " +
+		           "WHERE IDFIGURA = ? " +
+		           "WHERE IDDESENHO = ? ";
+	     	
+	     	BDSQLServer.COMANDO.prepareStatement (sql2);
+	     	
+	     	BDSQLServer.COMANDO.setArray (1, cliente.getStrGerador ()); //Nao sei mexer nesse ArrayList<String>
+	     	BDSQLServer.COMANDO.setInt    (2, cliente.getIdFigura ());
+	     	BDSQLServer.COMANDO.setInt    (3, cliente.getIdDesenho ());
+
+	     	BDSQLServer.COMANDO.executeUpdate ();
+	     	BDSQLServer.COMANDO.commit        ();
+	 	}
+	    catch (SQLException erro)
+	    {
+			BDSQLServer.COMANDO.rollback();
+	    	throw new Exception ("ERRO ao atualizar dados da Figura!");
 	  	}
 	}
+	
 	//RECUPERA OS DESENHOS DE UM CLIENTE ESPECIFICO
-	public static Desenho getDesenho (Desenho idCliente) throws Exception
+	public static Desenho getDesenho (Desenho ipCliente) throws Exception
 	{
 		Desenho desenho = null;
 
@@ -114,23 +166,23 @@ public class Desenhos
 		{
 	    	String sql;
 
-	     	sql = "SELECT CONTEUDO " +
-	              "FROM CLIENTES " +
-	              "WHERE IDCLIENTE = ?"; 
+	     	sql = "SELECT STRGERADOR " +
+	              "FROM FIGURAS " +
+	              "WHERE IDDESENHO = ? "; 
 
 	    	BDSQLServer.COMANDO.prepareStatement (sql);
 
-	     	BDSQLServer.COMANDO.setDouble (1, idCliente.getIdCliente());
+	     	BDSQLServer.COMANDO.setInt (1, ipCliente.getIdDesenho ());
 
 	     	MeuResultSet resultado = (MeuResultSet)BDSQLServer.COMANDO.executeQuery ();
 
 	    	if (!resultado.first())
 	    		throw new Exception ("NAO cadastrado.");
 
-	     	desenho = new Desenho (resultado.getInt   ("IDCLIENTE"),
-	                           	   resultado.getString("NOMEDESENHO"),
-	                           	   resultado.getDate  ("DATACRIACAO"),
-	                           	   resultado.getDate  ("DATAULTIMAATUALIZACAO")); 
+	     	desenho = new Desenho (resultado.getString ("IPCLIENTE"),
+	                           	   resultado.getInt	   ("IDDESENHO"),
+	                           	   resultado.getString   ("DTCRIACAO"),
+	                           	   resultado.getString   ("DTATUALIZACAO")); 
 	     							//resultado.getArray ("CONTEUDO")
 		}
 	    catch (SQLException erro)
@@ -139,27 +191,5 @@ public class Desenhos
 		}
 
 		return desenho;
-	}
-	//RECUPERA TODOS OS DESENHOS
-	public static MeuResultSet getDesenhos () throws Exception
-	{
-	 	MeuResultSet resultado = null;
-
-		try
-		{
-	    	String sql;
-
-	    	sql = "SELECT CONTEUDO " +
-	        	  "FROM CLIENTES"; //TALVEZ SELECT EM TODOS DESENHOS PRO CLIENTE VER O Q TEM NO SERVIDOR? SELECT CONTEUDO
-
-	    	BDSQLServer.COMANDO.prepareStatement (sql);
-
-	    	resultado = (MeuResultSet)BDSQLServer.COMANDO.executeQuery ();
-		}
-		catch (SQLException erro)
-	    {
-			throw new Exception ("ERRO ao recuperar clientes.");
-		}
-		return resultado;
 	}
 }

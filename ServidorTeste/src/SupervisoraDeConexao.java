@@ -15,17 +15,19 @@ public class SupervisoraDeConexao extends Thread
     private Socket              conexao;
     private ArrayList<Parceiro> usuarios;
     
-    private Desenho idCliente; //IP
+    private double ipCliente=0;
+    private int idDesenho=0;
+    Desenho d = new Desenho();
 
     public SupervisoraDeConexao
     (Socket conexao, ArrayList<Parceiro> usuarios)
     throws Exception
     {
         if (conexao==null)
-            throw new Exception ("Conexao ausente");
+            throw new Exception ("Conexao AUSENTE!");
 
         if (usuarios==null)
-            throw new Exception ("Usuarios ausentes");
+            throw new Exception ("Usuarios AUSENTES!");
 
         this.conexao  = conexao;
         this.usuarios = usuarios;
@@ -98,16 +100,17 @@ public class SupervisoraDeConexao extends Thread
 					// que voce vai fazer
 					// -----
 					// desconectar o usuario
-                	try
-                    {
-                		Desenhos.salvamento(new Desenho(idCliente, nomeDesenho, 0, 0, conteudo));
-                        System.out.println ("Desenho SALVO com sucesso!");
-                    }
-                    catch (Exception erro)
-                    {
-            			erro.printStackTrace();
-                        System.out.println (erro.getMessage());
-                    }
+                	
+                	PedidoDeSalvamento pedidoSalvamento = (PedidoDeSalvamento)comunicado;
+                	
+                	ipCliente = pedidoSalvamento.getIpCliente();
+                	idDesenho  = pedidoSalvamento.getIdDesenho();
+                	d = pedidoSalvamento.getDesenho();
+                	
+                	System.out.print (ipCliente);
+                	System.out.print (idDesenho);
+                	System.out.print (d);
+                	
 		        }
                 //PEDIDO PARA ABRIR O DESENHO
                 else if (comunicado instanceof PedidoDesenhos)
@@ -118,16 +121,12 @@ public class SupervisoraDeConexao extends Thread
 					// cliente fazendo usuario.receba(desenho)
 					// -----
 					// desconecta o usuario
-                	try
-                    {
-                		Desenhos.getDesenho(new Desenho (idCliente));
-                        System.out.println ("Desenho ENCONTRADO com sucesso!");
-                    }
-                    catch (Exception erro)
-                    {
-            			erro.printStackTrace();
-                        System.out.println (erro.getMessage());
-                    }
+                	
+                	PedidoDesenhos pedidoAbertura = (PedidoDesenhos)comunicado;
+                	
+                	idDesenho = pedidoAbertura.getIdDesenho();
+                	ipCliente = pedidoAbertura.getIpCliente();
+                	usuario.receba(d);
                 }
             }
         }

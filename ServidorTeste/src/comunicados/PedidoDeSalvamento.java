@@ -7,26 +7,25 @@ import BD.daos.Desenhos;
 import BD.dbos.Desenho;
 
 public class PedidoDeSalvamento extends Comunicado {
-	// vetor com os desenhos
-    // nome do desenho
-	
     private int idDesenho, idControler = 0;
-    private String dCri, dAtu, ipCliente;
+    private String dtCriacao, dtAtualizacao;
+    private double ipCliente;
     private ArrayList<String> figs, conteudo;
+    private Desenho desenho; //Adicionei
+    Desenhos ds = new Desenhos();//Adicionei
 	
-	public PedidoDeSalvamento (String idCliente, 
-							   String dataCriacao, String dataUltimaAtualizacao, ArrayList<String> figuras)
+	public PedidoDeSalvamento (double ipCliente, String dtCriacao, String dtAtualizacao, ArrayList<String> figuras)
 	{
-		this.ipCliente = idCliente;
-		this.dCri = dataCriacao;
-		this.dAtu = dataUltimaAtualizacao;
+		this.ipCliente = ipCliente;
+		this.dtCriacao = dtCriacao;
+		this.dtAtualizacao = dtAtualizacao;
 		this.idDesenho = idControler;//Ele só pode atualizar dpois que passar todos as figuras desse desenho
 		this.figs = figuras;
 		conteudo = new ArrayList<String>();
 		idControler++;
 	}
 	
-	public String getIdCliente ()
+	public double getIpCliente ()
 	{
 		return this.ipCliente;
 	}
@@ -41,14 +40,14 @@ public class PedidoDeSalvamento extends Comunicado {
 		return this.figs;
 	}
 	
-	public String getDataUltimaAtualizacao ()
+	public String getDtUltimaAtualizacao ()
 	{
-		return this.dAtu;
+		return this.dtAtualizacao;
 	}
 	
-	public String getDataCriacao ()
+	public String getDtCriacao ()
 	{
-		return this.dCri;
+		return this.dtCriacao;
 	}
 	
 	public ArrayList<String> getConteudo ()
@@ -56,7 +55,25 @@ public class PedidoDeSalvamento extends Comunicado {
 		return this.conteudo;
 	}
 	
-    //metodo para acrescentar um desenho
+	//ADICIONEI
+	public void setIpCliente (double ipCliente) throws Exception
+    {
+        this.ipCliente = ipCliente;
+    }
+
+    public void setIdDesenho (int idDesenho) 
+    {
+    	this.idDesenho = idDesenho;
+    }
+    public void setDesenho(Desenho des) throws Exception
+    {
+    	this.desenho = des;
+    }
+    /*public Desenho getDesenho ()
+    {
+        return this.desenho;
+    }*/
 	
+    //metodo para acrescentar um desenho
 	//metodo adicionar desenho
 }

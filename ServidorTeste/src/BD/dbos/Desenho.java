@@ -1,49 +1,75 @@
 package BD.dbos;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Vector;
 import java.sql.*;
 
 //Classe dbo seria um item armazenado na tabela
 public class Desenho implements Cloneable{
-	private double idCliente; //IP
-	private String nomeDesenho;
-	private Date dataCriacao;
-	private Date dataUltimaAtualizacao;
-	private ArrayList<String> conteudo;
+	private String ipCliente; 
+	private int idDesenho;
+	private String dtCriacao;
+	private String dtAtualizacao;
+	
+	private int idFigura;
+	private ArrayList<String> strGerador;
+	
  
-    public Desenho (double idCliente, String nomeDesenho, Date dataCriacao, Date dataUltimaAtualizacao) throws Exception
+	//Adicionei
+	public Desenho()
+	{
+		// TODO Auto-generated constructor stub
+	}
+	
+    public Desenho (String ipCliente, int idDesenho, String dtCriacao, String dtAtualizacao) throws Exception
     {
-        this.setIdCliente (idCliente);
-        this.setNomeDesenho (nomeDesenho);
-        this.setDataCriacao (dataCriacao);
-        this.setDataUltimaAtualizacao (dataUltimaAtualizacao);
-        conteudo = new ArrayList<String>();
+        this.setIpCliente (ipCliente);
+        this.setIdDesenho (idDesenho);
+        this.setDtCriacao (dtCriacao);
+        this.setDtAtualizacao (dtAtualizacao);
+        strGerador = new ArrayList<String>();
     }
 
     public String toString ()
     {
         String ret="";
 
-        ret+="ID Cliente: "+this.idCliente+"\n";
-        ret+="Nome Desenho..: "+this.nomeDesenho  +"\n";
-        ret+="Data Criação.: "+this.dataCriacao+"\n";
-        ret+="Data Atualização.: "+this.dataUltimaAtualizacao+"\n";
-        ret+="Conteudo.: "+this.conteudo;
+        ret+="IP Cliente: "+this.ipCliente+"\n";
+        ret+="ID Desenho..: "+this.idDesenho  +"\n";
+        ret+="Data Criação.: "+this.dtCriacao+"\n";
+        ret+="Data Atualização.: "+this.dtAtualizacao+"\n";
+        ret+="Conteudo.: "+this.strGerador;
         
         return ret;
     }
 
     public void addFigura(String fig)
     {
-    	conteudo.add(fig);
+    	strGerador.add(fig);
     }
+    //Adicionei
+    public void addIdDesenho(int idDesenho)
+	{
+		this.idDesenho = idDesenho;
+	}
+	public void addDtCriacao(String dtCriacao)
+	{
+		this.dtCriacao = dtCriacao;
+	}
+	public void addDtAtualizacao(String dtAtualizacao)
+	{
+		this.dtAtualizacao = dtAtualizacao;
+	}
+    
+    
     public int getQtd ()
     {
-    	return conteudo.size();
+    	return strGerador.size();
     }
     public String getFigura (int i)
     {
-    	return conteudo.get(i);
+    	return strGerador.get(i);
     }
     
     public boolean equals (Object obj)
@@ -59,19 +85,19 @@ public class Desenho implements Cloneable{
 
         Desenho liv = (Desenho)obj;
 
-        if (this.idCliente!=liv.idCliente)
+        if (this.ipCliente!=liv.ipCliente)
             return false;
 
-        if (this.nomeDesenho.equals(liv.nomeDesenho))
+        if (this.idDesenho!=liv.idDesenho)
             return false;
 
-        if (this.dataCriacao!=liv.dataCriacao)
+        if (this.dtCriacao!=liv.dtCriacao)
             return false;
         
-        if (this.dataUltimaAtualizacao!=liv.dataUltimaAtualizacao)
+        if (this.dtAtualizacao!=liv.dtAtualizacao)
             return false;
         
-        if (this.conteudo!=liv.conteudo)
+        if (this.strGerador!=liv.strGerador)
             return false;
         
         return true;
@@ -81,22 +107,22 @@ public class Desenho implements Cloneable{
     {
         int ret=666;
 
-        ret = 7*ret + new Float(this.idCliente).hashCode();
-        ret = 7*ret + this.nomeDesenho.hashCode();
-        ret = 7*ret + this.dataCriacao.hashCode();
-        ret = 7*ret + this.dataUltimaAtualizacao.hashCode();
-        ret = 7*ret + this.conteudo.hashCode();
+        ret = 7*ret + this.ipCliente.hashCode();
+        ret = 7*ret + new Float (this.idDesenho).hashCode();
+        ret = 7*ret + this.dtCriacao.hashCode();
+        ret = 7*ret + this.dtAtualizacao.hashCode();
+        ret = 7*ret + this.strGerador.hashCode();
 
         return ret;
     }
 
     public Desenho (Desenho modelo) throws Exception
     {
-        this.idCliente = modelo.idCliente; // nao clono, pq nao eh objeto
-        this.nomeDesenho   = modelo.nomeDesenho;   // nao clono, pq nao eh clonavel
-        this.dataCriacao  = modelo.dataCriacao;  // nao clono, pq nao eh objeto
-        this.dataUltimaAtualizacao  = modelo.dataUltimaAtualizacao;
-        this.conteudo  = modelo.conteudo;
+        this.ipCliente = modelo.ipCliente; // nao clono, pq nao eh objeto
+        this.idDesenho   = modelo.idDesenho;   // nao clono, pq nao eh clonavel
+        this.dtCriacao  = modelo.dtCriacao;  // nao clono, pq nao eh objeto
+        this.dtAtualizacao  = modelo.dtAtualizacao;
+        this.strGerador  = modelo.strGerador;
     }
 
     public Object clone ()
@@ -115,61 +141,74 @@ public class Desenho implements Cloneable{
     }
     
     //SETTERS
-    public void setIdCliente (double idCliente) throws Exception
+    public void setIpCliente (String ipCliente) throws Exception
     {
-        if (idCliente <= 0)
-            throw new Exception ("ID Cliente INVALIDO!");
+        if (ipCliente==null || ipCliente==(""))
+            throw new Exception ("IP Cliente INVALIDO!");
 
-        this.idCliente = idCliente;
+        this.ipCliente = ipCliente;
     }
-    public void setNomeDesenho (String nomeDesenho) throws Exception
+    public void setIdDesenho (int idDesenho) throws Exception
     {
-    	if (nomeDesenho==null || nomeDesenho.equals(""))
-            throw new Exception ("Nome do Desenho NAO fornecido.");
+    	if (idDesenho<=0)
+            throw new Exception ("ID do Desenho NAO fornecido.");
 
-        this.nomeDesenho = nomeDesenho;
+        this.idDesenho = idDesenho;
     }
-    public void setDataCriacao(Date dataCriacao) throws Exception 
+    public void setDtCriacao(String dtCriacao) throws Exception 
     {
-    	if (dataCriacao==null)
+    	if (dtCriacao==null || dtCriacao==(""))
             throw new Exception ("Data do Desenho NAO fornecido.");
 
-        this.dataCriacao = dataCriacao;
+        this.dtCriacao = dtCriacao;
     }
-    public void setDataUltimaAtualizacao(Date dataUltimaAtualizacao) throws Exception 
+    public void setDtAtualizacao(String dtAtualizacao) throws Exception 
     {
-    	if (dataUltimaAtualizacao==null)
+    	if (dtAtualizacao==null || dtAtualizacao==(""))
             throw new Exception ("Data da Atualizacao do Desenho NAO fornecido.");
 
-        this.dataUltimaAtualizacao = dataUltimaAtualizacao;
+        this.dtAtualizacao = dtAtualizacao;
     }
-    public void setConteudo(ArrayList<String> conteudo) throws Exception 
+    public void setStrGerador(ArrayList<String> strGerador) throws Exception 
     {
-    	if (conteudo==null)
+    	if (strGerador==null)
             throw new Exception ("Desenho NAO fornecido.");
 
-        this.conteudo = conteudo;
+        this.strGerador = strGerador;
     }
+    public void setIdFigura (int idFigura) throws Exception
+    {
+    	if (idFigura<=0)
+            throw new Exception ("ID da Figura NAO fornecido.");
+
+        this.idFigura = idFigura;
+    }
+    
     //GETTERS
-    public double getIdCliente ()
+    public String getIpCliente ()
     {
-        return this.idCliente;
+        return this.ipCliente;
     }
-    public String getNomeDesenho ()
+    public int getIdDesenho ()
     {
-        return this.nomeDesenho;
+        return this.idDesenho;
     }
-    public Date getDataCriacao ()
+    public String getDtCriacao ()
     {
-        return this.dataCriacao;
+        return this.dtCriacao;
     }
-    public Date getDataUltimaAtualizacao ()
+    public String getDtAtualizacao ()
     {
-        return this.dataUltimaAtualizacao;
+        return this.dtAtualizacao;
     }
-    public ArrayList<String> getConteudo ()
+    public ArrayList<String> getStrGerador ()
     {
-        return conteudo;
+        return strGerador;
     }
+    public int getIdFigura ()
+    {
+        return this.idFigura;
+    }
+    
 }
 
