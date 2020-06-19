@@ -5,12 +5,21 @@ CREATE DATABASE IF NOT EXISTS paint;
 USE paint;
 
 -- ============================================================== --
--- =================Criação da tabela de cliente================= --
+-- ================Criação da tabela de desenhos================= --
 -- ============================================================== --
-CREATE TABLE clientes (
-    idCliente INT AUTO_INCREMENT PRIMARY KEY, 
-    nomeDesenho VARCHAR(100) NOT NULL,
-    dataCriacao DATETIME NOT NULL,
-    dataUltimaAtualizacao DATETIME NOT NULL,
-    conteudo VARCHAR(250) NOT NULL
+CREATE TABLE desenhos (
+    ipCliente VARCHAR(250) PRIMARY KEY, 
+    idDesenho INT AUTO_INCREMENT NOT NULL,
+    dtCriacao DATETIME NOT NULL,
+    dtAtualizacao DATETIME NOT NULL
+);
+-- ============================================================== --
+-- =================Criação da tabela de figuras================= --
+-- ============================================================== --
+CREATE TABLE figuras (
+    idFigura INT AUTO_INCREMENT PRIMARY KEY,
+    strGerador VARCHAR(250) NOT NULL,
+	CONSTRAINT fk_id_desenho
+        FOREIGN KEY (idDesenho) 
+        REFERENCES desenhos (idDesenho)
 );
