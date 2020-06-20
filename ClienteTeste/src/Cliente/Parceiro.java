@@ -1,7 +1,7 @@
 package Cliente;
 import java.io.*;
 import java.net.*;
-import java.util.*;
+//import java.util.*;
 import java.util.concurrent.Semaphore;
 
 import comunicados.Comunicado;

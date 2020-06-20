@@ -4,34 +4,41 @@ import java.sql.Date;
 import java.util.ArrayList;
 
 public class PedidoDesenhos extends Comunicado{
-	private double idCliente;// IP cliente
-	//private String nomeDes;// nome do desenho
-	//private Date dataCri;// datas de criacao
-	//private Date dataUltimaAtua;//ultima atualizacao
-	//private ArrayList<String> cont;//Lista desenho
+	private String ipCliente;
+	private int idDesenho;
+	//private Date dataCri;
+	//private Date dataUltimaAtua;
+	//private ArrayList<String> cont;
 	
-	public PedidoDesenhos(double idCliente)
+	public PedidoDesenhos(String ipCliente, int idDesenho)
 	{
-		this.idCliente = idCliente;
+		this.ipCliente = ipCliente;
+		this.idDesenho = idDesenho;
 	}
-    //getters
-	//ID Cliente
-	public double getIdCliente() {
-		return this.idCliente;
+	
+	public String getIpCliente() {
+		return this.ipCliente;
 	}
-
-	//nome desenho
-	/*public String getNomeD() {
-		return nomeDes;
+	public int getIdDesenho() {
+		return this.idDesenho;
 	}
-
-	//dataCriacao 
-	public Date getDataCriacao() {
+	/*public Date getDataCriacao() {
 		return dataCri;
 	}
-
-	//dataUltimaAtualizacao
 	public Date getDataUltimaAtualizacao() {
 		return dataUltimaAtua;
 	}*/
+	
+	//Adicionei
+	public void setIpCliente (String ipCliente) throws Exception
+    {
+    	this.ipCliente = ipCliente;
+    }
+    public void setIdDesenho (int idDesenho) throws Exception
+    {
+        if (idDesenho==0)
+            throw new Exception ("ID Desenho NAO fornecido!");
+
+        this.idDesenho = idDesenho;
+    }
 }

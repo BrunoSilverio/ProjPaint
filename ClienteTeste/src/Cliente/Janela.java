@@ -1,15 +1,13 @@
 package Cliente;
-import Servidor.*;
+
 import comunicados.*;
+import ServidorTeste.*;
+import BD.dbos.Desenho;
 
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
-
-import BD.daos.Desenhos;
-import BD.dbos.Desenho;
-
 import javax.imageio.*;
 import java.io.*;
 import java.util.*;
@@ -751,7 +749,7 @@ public class Janela extends JFrame
 		}
     	
     }
-    
+    //FUNÇÃO PARA ABRIR DESENHO
     protected class Abrir extends JFrame implements ActionListener
     {
     	public void actionPerformed(String[] args)
@@ -821,7 +819,7 @@ public class Janela extends JFrame
             }
             
 
-		PedidoDesenhos pedidoAbertura = new PedidoDesenhos(1.0);
+		PedidoDesenhos pedidoAbertura = new PedidoDesenhos("192.168.0.1", 1);
 		
 		try {
             int posi = 0;
@@ -881,7 +879,7 @@ public class Janela extends JFrame
 		}
     }
     
-    
+    //FUNÇÃO PARA SALVAR UM DESENHO
     protected class Salvar extends JFrame implements ActionListener
     {
     	   public void salvando (String[] args)
@@ -952,10 +950,10 @@ public class Janela extends JFrame
 	
 	           Desenho d = new Desenho();
 	           
-	           d.addNome("d1");
+	           d.addIdDesenho();
 	           d.adddataCriacao("data1");
 	           d.adddataUltimaAtualizacao("data2");
-	           d.adicionaAutorDoDesenho ("autor"); 
+	           d.adicionaAutorDoDesenho ("IPCliente"); 
 	
 	           //fazer diversas vezes, num loop, 
 	           for(int i = 0; i<figuras.size();i++)
@@ -963,11 +961,11 @@ public class Janela extends JFrame
 	               d.addFigura(figuras.get(i));
 	           }
 	
-	           PedidoDeSalvamento pedidoSalv = new PedidoDeSalvamento(1.0,d,"d1");
+	           PedidoDeSalvamento pedidoSalv = new PedidoDeSalvamento("192.168.0.1","data1","data2",d);
 	
 	           try 
 	           {
-	               servidor.receba(new PedidoDeSalvamento(1.0,d,"d1"));
+	               servidor.receba(new PedidoDeSalvamento("192.168.0.1","data1","data2",d));
 	               
 	           }
 	           
