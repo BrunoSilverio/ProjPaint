@@ -6,33 +6,29 @@ import java.util.ArrayList;
 import BD.dbos.Desenho;
 
 public class PedidoDesenhos extends Comunicado{
-	private double ipCliente;
+	private String ipCliente;
 	private int idDesenho;
-	//private Date dataCri;
-	//private Date dataUltimaAtua;
-	//private ArrayList<String> cont;
+	private ArrayList<Desenho> figs;
 	
-	public PedidoDesenhos(double ipCliente, int idDesenho)
+	public PedidoDesenhos(String ipCliente, int idDesenho)
 	{
 		this.ipCliente = ipCliente;
 		this.idDesenho = idDesenho;
 	}
 	
-	public double getIpCliente() {
+	public String getIpCliente() {
 		return this.ipCliente;
 	}
 	public int getIdDesenho() {
 		return this.idDesenho;
 	}
-	/*public Date getDataCriacao() {
-		return dataCri;
+	public ArrayList<Desenho> getDesenho ()
+	{
+		return this.figs;
 	}
-	public Date getDataUltimaAtualizacao() {
-		return dataUltimaAtua;
-	}*/
 	
 	//Adicionei
-	public void setIpCliente (double ipCliente) throws Exception
+	public void setIpCliente (String ipCliente) throws Exception
     {
     	this.ipCliente = ipCliente;
     }

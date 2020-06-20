@@ -9,23 +9,23 @@ import BD.dbos.Desenho;
 public class PedidoDeSalvamento extends Comunicado {
     private int idDesenho, idControler = 0;
     private String dtCriacao, dtAtualizacao;
-    private double ipCliente;
-    private ArrayList<String> figs, conteudo;
+    private String ipCliente;
+    private ArrayList<Desenho> figs, conteudo;
     private Desenho desenho; //Adicionei
     Desenhos ds = new Desenhos();//Adicionei
 	
-	public PedidoDeSalvamento (double ipCliente, String dtCriacao, String dtAtualizacao, ArrayList<String> figuras)
+	public PedidoDeSalvamento (String ipCliente, String dtCriacao, String dtAtualizacao, ArrayList<Desenho> figuras)
 	{
 		this.ipCliente = ipCliente;
 		this.dtCriacao = dtCriacao;
 		this.dtAtualizacao = dtAtualizacao;
 		this.idDesenho = idControler;//Ele só pode atualizar dpois que passar todos as figuras desse desenho
 		this.figs = figuras;
-		conteudo = new ArrayList<String>();
+		conteudo = new ArrayList<Desenho>();
 		idControler++;
 	}
 	
-	public double getIpCliente ()
+	public String getIpCliente ()
 	{
 		return this.ipCliente;
 	}
@@ -35,7 +35,7 @@ public class PedidoDeSalvamento extends Comunicado {
 		return this.idDesenho;
 	}
 	
-	public ArrayList<String> getDesenho ()
+	public ArrayList<Desenho> getDesenho ()
 	{
 		return this.figs;
 	}
@@ -50,13 +50,13 @@ public class PedidoDeSalvamento extends Comunicado {
 		return this.dtCriacao;
 	}
 	
-	public ArrayList<String> getConteudo ()
+	public ArrayList<Desenho> getConteudo ()
 	{
 		return this.conteudo;
 	}
 	
 	//ADICIONEI
-	public void setIpCliente (double ipCliente) throws Exception
+	public void setIpCliente (String ipCliente) throws Exception
     {
         this.ipCliente = ipCliente;
     }

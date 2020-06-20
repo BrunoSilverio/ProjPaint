@@ -15,9 +15,9 @@ public class SupervisoraDeConexao extends Thread
     private Socket              conexao;
     private ArrayList<Parceiro> usuarios;
     
-    private double ipCliente=0;
+    private String ipCliente;
     private int idDesenho=0;
-    Desenho d = new Desenho();
+    private ArrayList<Desenho> d;
 
     public SupervisoraDeConexao
     (Socket conexao, ArrayList<Parceiro> usuarios)
@@ -126,7 +126,7 @@ public class SupervisoraDeConexao extends Thread
                 	
                 	idDesenho = pedidoAbertura.getIdDesenho();
                 	ipCliente = pedidoAbertura.getIpCliente();
-                	usuario.receba(d);
+                	d = pedidoAbertura.getDesenho();
                 }
             }
         }
